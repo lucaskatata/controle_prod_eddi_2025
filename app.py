@@ -8,19 +8,26 @@ st.set_page_config(layout="wide", page_title="Produção", page_icon="📃")
 st.title(f"Controle da Produção 2025 - EDDI CASA")
 
 
-@st.cache_data
-def load_data():
-    dataset = "https://docs.google.com/spreadsheets/d/1wyFQfS10j-rJEjrxGRQD4BYd2qfyacEaVIjX91CUgPI/export?format=csv&gid=0#gid=0"
-    df = pd.read_csv(dataset)
-    df = df.applymap(lambda x: x.title() if isinstance(x, str) else x)
-    columns = df.columns
-    colunas_formatadas = [coluna.title() for coluna in columns]
-    df.columns = colunas_formatadas
-    return df
+# @st.cache_data
+# def load_data():
+#     dataset = "https://docs.google.com/spreadsheets/d/1wyFQfS10j-rJEjrxGRQD4BYd2qfyacEaVIjX91CUgPI/export?format=csv&gid=0#gid=0"
+#     df = pd.read_csv(dataset)
+#     df = df.applymap(lambda x: x.title() if isinstance(x, str) else x)
+#     columns = df.columns
+#     colunas_formatadas = [coluna.title() for coluna in columns]
+#     df.columns = colunas_formatadas
+#     return df
 
 # %%
-df = load_data()
+dataset = "https://docs.google.com/spreadsheets/d/1wyFQfS10j-rJEjrxGRQD4BYd2qfyacEaVIjX91CUgPI/export?format=csv&gid=0#gid=0"
+df = pd.read_csv(dataset)
+df = df.applymap(lambda x: x.title() if isinstance(x, str) else x)
+columns = df.columns
+colunas_formatadas = [coluna.title() for coluna in columns]
+df.columns = colunas_formatadas
+# df = load_data()
 # st.dataframe(df)
+# %%
 
 df["Data"] = pd.to_datetime(df["Data"], format="%d/%m/%Y").dt.date
 
