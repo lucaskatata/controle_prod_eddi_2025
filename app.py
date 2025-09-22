@@ -10,9 +10,7 @@ st.title(f"Controle da Produção 2025 - EDDI CASA")
 
 @st.cache_data
 def load_data():
-    # dataset = "datasets/CONTROLE DA PRODUCAO E M.O. - 2024.csv"
     dataset = "https://docs.google.com/spreadsheets/d/1wyFQfS10j-rJEjrxGRQD4BYd2qfyacEaVIjX91CUgPI/export?format=csv&gid=0#gid=0"
-    # dataset = "datasets/Controle da produção - 2025.csv"
     df = pd.read_csv(dataset)
     df = df.applymap(lambda x: x.title() if isinstance(x, str) else x)
     columns = df.columns
