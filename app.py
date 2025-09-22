@@ -22,7 +22,7 @@ def load_data():
 df = load_data()
 # st.dataframe(df)
 
-df["Data"] = pd.to_datetime(df["Data"], format="%d/%m/%Y")
+df["Data"] = pd.to_datetime(df["Data"], format="%d/%m/%Y").dt.date
 
 # %%
 col1, col2, col3, col4 = st.columns(4)
