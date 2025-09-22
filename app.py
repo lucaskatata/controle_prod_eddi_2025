@@ -44,4 +44,4 @@ df_filtrado_mes['Producao Mao De Obra'] = df_filtrado_mes['Producao Mao De Obra'
 total_mes = df_filtrado_mes['Producao Mao De Obra'].sum()
 col4.metric(label='Total', value=f'R$ {round(total_mes,2)}')
 
-st.dataframe(df_filtrado_mes)
+st.dataframe(df_filtrado_mes, hide_index=True)
