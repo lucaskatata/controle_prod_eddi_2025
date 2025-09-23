@@ -3,7 +3,7 @@ import streamlit as st
 import pandas as pd
 
 
-st.set_page_config(layout="wide", page_title="Produção", page_icon="📃")
+st.set_page_config(layout="wide", page_title="Controle da Produção 2025", page_icon="📃")
 
 st.title(f"Controle da Produção 2025 - EDDI CASA")
 
