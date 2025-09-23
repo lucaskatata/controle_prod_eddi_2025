@@ -13,7 +13,7 @@ dataset_custos = "https://docs.google.com/spreadsheets/d/1wyFQfS10j-rJEjrxGRQD4B
 
 df = pd.read_csv(dataset)
 df_custos = pd.read_csv(dataset_custos)
-df_custos = df_custos.rename(columns={'Unnamed: 0': 'Mes'})
+
 
 df_custos['Bonus'] = df_custos['Bonus'].str.replace(',','.').astype(float)
 df_custos['Total'] = df_custos['Total'].str.replace(',','.').astype(float)
@@ -22,7 +22,6 @@ df = df.applymap(lambda x: x.title() if isinstance(x, str) else x)
 columns = df.columns
 colunas_formatadas = [coluna.title() for coluna in columns]
 df.columns = colunas_formatadas
-
 df["Data"] = pd.to_datetime(df["Data"], format="%d/%m/%Y").dt.date
 
 col1, col2, col3, col4 = st.columns(4)
@@ -58,6 +57,6 @@ col6.metric(label='Custo Total', value=f'R$ {round(total_selecionado, 2)}')
 diferenca = total_mes - total_selecionado
 diferenca = round(diferenca,2)
 col5.metric(label='Diferença', value=f'R$ {diferenca}')
+df_filtrado_mes = df_filtrado_mes.drop(columns='Mes')
 
 st.dataframe(df_filtrado_mes, hide_index=True)
-
