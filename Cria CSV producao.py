@@ -158,12 +158,12 @@ def concatena_meses(pasta):
     df = df.sort_values(by="Data").reset_index(drop=True)
     return df
 
-# %%
+
 pasta = Path(input('Caminho da pasta da produção interna').replace('"',''))
 prod_int = criar_df_producao_interna(pasta, df_diario_producao_interna)
 
-pastamo = Path(input('Caminho da pasta da produção da mão de obra').replace('"',''))
-mo = criar_df_mao_de_obra(pastamo, df_diario_mao_de_obra)
+pasta_mo = Path(input('Caminho da pasta da produção da mão de obra').replace('"',''))
+mo = criar_df_mao_de_obra(pasta_mo, df_diario_mao_de_obra)
 mo
 
 df = pd.merge(prod_int, mo, on="Data", how="outer").fillna(0)
@@ -189,16 +189,40 @@ df = df[
         "Embalagem",
     ]
 ]
-df
-# %%
-pasta_pai = Path(r"D:\Trabalho - Eddi\Controle de Produção - 2025\Produção\10 - Outubro")
 
-for c in pasta_pai.iterdir():
-    print(c)
-    print(f'stem = {c.stem}')
-    print(f'name = {c.name}')
-    suf = str(c.name).split(' ')
-    print(suf)
-    for i,n in enumerate(suf):
-        print(f'Posição: {i}\nDado: {n}')
-    print(suf[-1])
+df1 = df
+
+df1 = df1.reset_index()
+
+df2 = df1
+
+df2['Data'] = pd.to_datetime(df2['Data'],format='%d/%m/%Y')
+
+df2['Mes'] = df2["Data"].dt.month
+
+df2.set_index(['Data'])
+
+dic_mes = {
+    1: 'janeiro',
+    2: 'fevereiro',
+    3: 'março',
+    4: 'abril',
+    5: 'maio',
+    6: 'junho',
+    7: 'julho',
+    8: 'agosto',
+    9: 'setembro',
+    10: 'outubro',
+    11: 'novembro',
+    12: 'dezembro'
+}
+df2['Mes'] = df2['Mes'].map(dic_mes)
+
+df2['Mes'] = df2['Mes'].str.title()
+
+
+df2['Data'] = df2['Data'].dt.strftime('%d/%m/%Y')
+
+df2 = df2.set_index('Data')
+
+df2.to_excel('Planilha para colar no Google Sheets - Controle da Produção.xlsx')
