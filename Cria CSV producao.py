@@ -220,7 +220,6 @@ df2['Mes'] = df2['Mes'].map(dic_mes)
 
 df2['Mes'] = df2['Mes'].str.title()
 
-
 df2['Data'] = df2['Data'].dt.strftime('%d/%m/%Y')
 
 df2 = df2.set_index('Data')
