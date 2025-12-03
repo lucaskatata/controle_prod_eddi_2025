@@ -22,6 +22,25 @@ def retorna_mes(caminho_pasta):
     mes = meses.get(mes)
     return mes
 
+def retorna_mes1(caminho_pasta):
+    meses = {
+        "01": "Janeiro",
+        "02": "Fevereiro",
+        "03": "Março",
+        "04": "Abril",
+        "05": "Maio",
+        "06": "Junho",
+        "07": "Julho",
+        "08": "Agosto",
+        "09": "Setembro",
+        "10": "Outubro",
+        "11": "Novembro",
+        "12": "Dezembro",
+    }
+    pasta = Path(caminho_pasta)
+    mes = pasta.name.split('-')[0]
+    mes = meses.get(mes)
+    return mes
 
 def df_diario_producao_interna(arquivo):
     df_final = pd.DataFrame()
@@ -158,13 +177,21 @@ def concatena_meses(pasta):
     df = df.sort_values(by="Data").reset_index(drop=True)
     return df
 
+diretorio = Path(input('Caminho da pasta ').replace('"',''))
 
-pasta = Path(input('Caminho da pasta da produção interna').replace('"',''))
+for arquivo in diretorio.iterdir():
+    if arquivo.name.endswith('2025'):
+        pasta = arquivo
+    else:
+        pasta_mo = arquivo
+
 prod_int = criar_df_producao_interna(pasta, df_diario_producao_interna)
 
-pasta_mo = Path(input('Caminho da pasta da produção da mão de obra').replace('"',''))
 mo = criar_df_mao_de_obra(pasta_mo, df_diario_mao_de_obra)
-mo
+
+
+mes = retorna_mes1(pasta)
+codigo_mes = pasta.name.split('-')[0]
 
 df = pd.merge(prod_int, mo, on="Data", how="outer").fillna(0)
 
@@ -224,4 +251,12 @@ df2['Data'] = df2['Data'].dt.strftime('%d/%m/%Y')
 
 df2 = df2.set_index('Data')
 
-df2.to_excel('Planilha para colar no Google Sheets - Controle da Produção.xlsx')
+pasta_temp = Path(__file__).parent / "temp"
+pasta_temp.mkdir(exist_ok=True)
+
+arquivo_excel = pasta_temp / f"Controle da produção - {codigo_mes} {mes} 2025.xlsx"
+arquivo_csv   = pasta_temp / f"Controle da produção - {codigo_mes} {mes} 2025.csv"
+
+# salva
+df2.to_excel(arquivo_excel)
+df2.to_csv(arquivo_csv, index=False)
