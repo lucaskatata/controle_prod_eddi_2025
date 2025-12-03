@@ -177,13 +177,18 @@ def concatena_meses(pasta):
     df = df.sort_values(by="Data").reset_index(drop=True)
     return df
 
+diretorio = Path(input('Caminho da pasta ').replace('"',''))
 
-pasta = Path(input('Caminho da pasta da produção interna ').replace('"',''))
+for arquivo in diretorio.iterdir():
+    if arquivo.name.endswith('2025'):
+        pasta = arquivo
+    else:
+        pasta_mo = arquivo
+
 prod_int = criar_df_producao_interna(pasta, df_diario_producao_interna)
 
-pasta_mo = Path(input('Caminho da pasta da produção da mão de obra ').replace('"',''))
 mo = criar_df_mao_de_obra(pasta_mo, df_diario_mao_de_obra)
-mo
+
 
 mes = retorna_mes1(pasta)
 codigo_mes = pasta.name.split('-')[0]
