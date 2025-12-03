@@ -251,6 +251,12 @@ df2['Data'] = df2['Data'].dt.strftime('%d/%m/%Y')
 
 df2 = df2.set_index('Data')
 
-df2.to_excel(f'Controle da produção - {codigo_mes} {mes} 2025.xlsx')
+pasta_temp = Path(__file__).parent / "temp"
+pasta_temp.mkdir(exist_ok=True)
 
-df2.to_csv(f'Controle da produção - {codigo_mes} {mes} 2025.csv')
+arquivo_excel = pasta_temp / f"Controle da produção - {codigo_mes} {mes} 2025.xlsx"
+arquivo_csv   = pasta_temp / f"Controle da produção - {codigo_mes} {mes} 2025.csv"
+
+# salva
+df2.to_excel(arquivo_excel)
+df2.to_csv(arquivo_csv, index=False)
