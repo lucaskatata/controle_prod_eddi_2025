@@ -45,7 +45,7 @@ def retorna_mes1(caminho_pasta):
 def df_diario_producao_interna(arquivo):
     df_final = pd.DataFrame()
     lista_df = []
-    df = pd.read_excel(arquivo, sheet_name="CAPA", usecols="B:E", nrows=12, skiprows=5)
+    df = pd.read_excel(arquivo, sheet_name="CAPA", usecols="B:E", nrows=12, skiprows=5, engine='openpyxl')
     df["PROCESSO"] = df["PROCESSO"].str.split("-").str[-1].str.title()
     df = df.round(2)
     df["PROCESSO"] = df["PROCESSO"].str.strip()
@@ -73,9 +73,10 @@ def criar_df_producao_interna(caminho_pasta, df_diario_producao_interna):
     lista_df = []
     df_final = pd.DataFrame()
     for arquivo in caminho_pasta.iterdir():
-        df = df_diario_producao_interna(arquivo)
-        lista_df.append(df)
-        df_final = pd.concat(lista_df)
+        if arquivo.suffix.lower() == '.xlsx':
+            df = df_diario_producao_interna(arquivo)
+            lista_df.append(df)
+            df_final = pd.concat(lista_df)
 
     df_final.index.name = "Data"
     return df_final
@@ -111,10 +112,11 @@ def df_diario_mao_de_obra(arquivo):
 def criar_df_mao_de_obra(caminho_pasta, df_diario_mao_de_obra):
     lista_df = []
     df_final = pd.DataFrame()
-    for arquivo in caminho_pasta.iterdir():
-        df = df_diario_mao_de_obra(arquivo)
-        lista_df.append(df)
-        df_final = pd.concat(lista_df)
+    for arquivo in caminho_pasta.iterdir():        
+        if arquivo.suffix.lower() == '.xlsx':
+            df = df_diario_mao_de_obra(arquivo)
+            lista_df.append(df)
+            df_final = pd.concat(lista_df)
     df_final.index = df_final.index.str.replace(" M.O", "")
     df_mo = df_final.drop(
         columns=[
@@ -177,9 +179,9 @@ def concatena_meses(pasta):
     df = df.sort_values(by="Data").reset_index(drop=True)
     return df
 
-diretorio = Path(input('Caminho da pasta ').replace('"',''))
+diretorio = Path(input('Caminho da pasta '))
 
-for arquivo in diretorio.iterdir():
+for arquivo in diretorio.iterdir():    
     if arquivo.name.endswith('2025'):
         pasta = arquivo
     else:
